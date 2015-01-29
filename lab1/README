@@ -15,3 +15,19 @@ Instructions per cycle, 1.35181
 L1 misses per frame, 227196
 L1 misses per instruction, 0.00631513
 Instruction count per frame, 3.59764e+07
+
+////
+
+Optimizations:
+--
+
+Makefile: 
+	- added an -Ofast optimization flag. This helped a lot - the compiler optimized a lot of instructions for us elsewhere in the code.
+	- removed the -fno-tree-vectorize flag. 
+
+grayScale():
+	- removed intermediary variable 'color'
+
+sobelCalc():
+	- moved calculations for y and total in to the for-loop for the x calculation. This saves having to loop through the same image 3 times.
+	- removed intermediary variables: instead of creating temporary variables to name and hold calculations for x and y like any sane software engineer, we added and assigned x and y to total in one step. Not sure if this actually achieved anything, as this micro-optimization is something the compiler should handle.
