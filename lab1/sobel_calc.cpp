@@ -33,28 +33,21 @@ void sobelCalc(Mat& img_gray, Mat& img_sobel_out)
 {  
   // Apply Sobel filter to black & white image
   unsigned short sobel;
-  unsigned short sobel_x;
-  unsigned short sobel_y;
 
   for (int i=1; i<img_gray.rows; i++) {
     for (int j=1; j<img_gray.cols; j++) {
-      // Calculate the x convolution
-      sobel_x = abs(img_gray.data[IMG_WIDTH*(i-1) + (j-1)]- 
-		  img_gray.data[IMG_WIDTH*(i+1) + (j-1)] + 
-		  2*img_gray.data[IMG_WIDTH*(i-1) + (j)] - 
-		  2*img_gray.data[IMG_WIDTH*(i+1) + (j)] + 
-		  img_gray.data[IMG_WIDTH*(i-1) + (j+1)] - 
-		  img_gray.data[IMG_WIDTH*(i+1) + (j+1)]);
- 
-      // Calc the y convolution
-      sobel_y = abs(img_gray.data[IMG_WIDTH*(i-1) + (j-1)] - 
+      sobel = abs(img_gray.data[IMG_WIDTH*(i-1) + (j-1)]- 
+      img_gray.data[IMG_WIDTH*(i+1) + (j-1)] + 
+      2*img_gray.data[IMG_WIDTH*(i-1) + (j)] - 
+      2*img_gray.data[IMG_WIDTH*(i+1) + (j)] + 
+      img_gray.data[IMG_WIDTH*(i-1) + (j+1)] - 
+      img_gray.data[IMG_WIDTH*(i+1) + (j+1)]) + abs(img_gray.data[IMG_WIDTH*(i-1) + (j-1)] - 
        img_gray.data[IMG_WIDTH*(i-1) + (j+1)] + 
        2*img_gray.data[IMG_WIDTH*(i) + (j-1)] - 
        2*img_gray.data[IMG_WIDTH*(i) + (j+1)] + 
        img_gray.data[IMG_WIDTH*(i+1) + (j-1)] - 
        img_gray.data[IMG_WIDTH*(i+1) + (j+1)]);
 
-      sobel = sobel_x + sobel_y;
       sobel = (sobel > 255) ? 255 : sobel;
       img_sobel_out.data[IMG_WIDTH*(i) + j] = sobel;
     }
