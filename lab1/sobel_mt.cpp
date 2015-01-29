@@ -18,7 +18,7 @@
 
 using namespace cv;
 
-static ofstream results_file;
+static ofstream results_file;endS
 
 // Define image mats to pass between function calls
 static Mat img_gray, img_sobel;
@@ -90,6 +90,7 @@ void *runSobelMT(void *ptr)
     pc_stop(&perf_counters);
 
     gray_time = perf_counters.cycles.count;
+
     sobel_l1cm += perf_counters.l1_misses.count;
     sobel_ic += perf_counters.ic.count;
 
@@ -119,8 +120,8 @@ void *runSobelMT(void *ptr)
     total_ipc += float(sobel_ic/float(gray_time + sobel_time));
 
     // Press q to exit
-    char c = cvWaitKey(10);
-    if (c == 'q') {
+    char c = cvWaitKey(5);
+    if (c == 'q' || i==10) {
       break;
     }
     i++;

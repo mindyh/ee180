@@ -103,7 +103,7 @@ void runSobelST()
 
     // Press q to exit
     char c = cvWaitKey(5);
-    if (c == 'q') {
+    if (c == 'q' || i==10) {
       break;
     }
     i++;
