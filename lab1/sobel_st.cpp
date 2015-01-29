@@ -38,9 +38,9 @@ static float sobel_ic_total, sobel_l1cm_total;
 void runSobelST()
 {
   // Set up variables for computing Sobel
-  //string top = "Sobel Top";
+  string top = "Sobel Top";
   Mat src;
-  uint64_t cap_time, gray_time, sobel_time, disp_time, sobel_l1cm, sobel_ic;
+  uint64_t cap_time, gray_time, sobel_time, sobel_ic;
 
   counters_t perf_counters;
 
@@ -66,7 +66,7 @@ void runSobelST()
     pc_stop(&perf_counters);
 
     cap_time = perf_counters.cycles.count;
-    sobel_l1cm = perf_counters.l1_misses.count;
+    sobel_l1cm_total += perf_counters.l1_misses.count;
     sobel_ic = perf_counters.ic.count;
 
     pc_start(&perf_counters);
@@ -74,7 +74,7 @@ void runSobelST()
     pc_stop(&perf_counters);
 
     gray_time = perf_counters.cycles.count;
-    sobel_l1cm += perf_counters.l1_misses.count;
+    sobel_l1cm_total += perf_counters.l1_misses.count;
     sobel_ic += perf_counters.ic.count;
 
     pc_start(&perf_counters);
@@ -84,25 +84,25 @@ void runSobelST()
     sobel_time = perf_counters.cycles.count;
 
     pc_start(&perf_counters);
-    namedWindow("Sobel Top", CV_WINDOW_AUTOSIZE);
-    imshow("Sobel Top", img_sobel);
+    namedWindow(top, CV_WINDOW_AUTOSIZE);
+    imshow(top, img_sobel);
     pc_stop(&perf_counters);
 
-    disp_time = perf_counters.cycles.count;
-    sobel_l1cm += perf_counters.l1_misses.count;
-    sobel_ic += perf_counters.ic.count;
+    disp_total += perf_counters.cycles.count;
+    sobel_l1cm_total += perf_counters.l1_misses.count;
+    sobel_ic_total += perf_counters.ic.count;
 
     cap_total += cap_time;
     gray_total += gray_time;
     sobel_total += sobel_time;
-    sobel_l1cm_total += sobel_l1cm;
+    //sobel_l1cm_total += sobel_l1cm;
     sobel_ic_total += sobel_ic;
-    disp_total += disp_time;
+    //disp_total += disp_time;
     total_fps += PROC_FREQ/float(cap_time + gray_time + sobel_time);
     total_ipc += float(sobel_ic/float(gray_time + sobel_time));
 
     // Press q to exit
-    char c = cvWaitKey(10);
+    char c = cvWaitKey(5);
     if (c == 'q') {
       break;
     }
@@ -128,7 +128,7 @@ void runSobelST()
   results_file << "L1 misses per frame, " << sobel_l1cm_total/i << endl;
   results_file << "L1 misses per instruction, " << sobel_l1cm_total/sobel_ic_total << endl;
   results_file << "Instruction count per frame, " << sobel_ic_total/i << endl;
+  results_file.close();
 
   cvReleaseCapture(&web_cam_cap);
-  results_file.close();
 }
