@@ -1,1 +1,18 @@
-LOLOLOL GITHUB YAAAYYY
+Percent of time per function
+Capture, 42.2265%
+Grayscale, 24.3344%
+Sobel, 25.2439%
+Display, 8.19521%
+
+Summary
+Frames per second, 18.9422
+Cycles per frame, 5.97557e+07
+Energy per frames (mJ), 73.9091
+Total frames, 11
+
+Hardware Stats (Cap + Gray + Sobel + Display)
+Instructions per cycle, 1.23416
+L1 misses per frame, 215835
+L1 misses per instruction, 0.00647085
+Instruction count per frame, 3.3355e+07
+
