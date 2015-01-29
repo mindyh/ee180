@@ -38,7 +38,7 @@ static float sobel_ic_total, sobel_l1cm_total;
 void runSobelST()
 {
   // Set up variables for computing Sobel
-  string top = "Sobel Top";
+  //string top = "Sobel Top";
   Mat src;
   uint64_t cap_time, gray_time, sobel_time, disp_time, sobel_l1cm, sobel_ic;
 
@@ -84,8 +84,8 @@ void runSobelST()
     sobel_time = perf_counters.cycles.count;
 
     pc_start(&perf_counters);
-    namedWindow(top, CV_WINDOW_AUTOSIZE);
-    imshow(top, img_sobel);
+    namedWindow("Sobel Top", CV_WINDOW_AUTOSIZE);
+    imshow("Sobel Top", img_sobel);
     pc_stop(&perf_counters);
 
     disp_time = perf_counters.cycles.count;
