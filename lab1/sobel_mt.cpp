@@ -36,9 +36,10 @@ static float sobel_ic_total, sobel_l1cm_total;
  ********************************************/
 void *runSobelMT(void *ptr)
 {
+  Mat *curr_img = (Mat *)ptr;
+
   // Set up variables for computing Sobel
   string top = "Sobel Top";
-  Mat src;
   uint64_t cap_time, gray_time, sobel_time, disp_time, sobel_l1cm, sobel_ic;
   pthread_t myID = pthread_self();
   counters_t perf_counters;
@@ -58,68 +59,74 @@ void *runSobelMT(void *ptr)
   
   // Start algorithm
   CvCapture* web_cam_cap;
-
-  web_cam_cap = cvCreateCameraCapture(0);
-  cvSetCaptureProperty(web_cam_cap, CV_CAP_PROP_FRAME_WIDTH, IMG_WIDTH);
-  cvSetCaptureProperty(web_cam_cap, CV_CAP_PROP_FRAME_HEIGHT, IMG_HEIGHT);
-
+  // can only have one thread accessing camera at any time
+  if (myID == thread0_id) {
+    web_cam_cap = cvCreateCameraCapture(0);
+    cvSetCaptureProperty(web_cam_cap, CV_CAP_PROP_FRAME_WIDTH, IMG_WIDTH);
+    cvSetCaptureProperty(web_cam_cap, CV_CAP_PROP_FRAME_HEIGHT, IMG_HEIGHT);
+  }
+  
   // Keep track of the frames
   int i = 0;
 
+  // Allocate memory for temp images
+  Mat temp = Mat(IMG_HEIGHT, IMG_WIDTH, CV_8UC1);
+
   while (1) {
-    // Allocate memory to hold grayscale and sobel images
-    img_gray = Mat(IMG_HEIGHT, IMG_WIDTH, CV_8UC1);
-    img_sobel = Mat(IMG_HEIGHT, IMG_WIDTH, CV_8UC1);
 
-    pc_start(&perf_counters);
-    src = cvQueryFrame(web_cam_cap);
-    pc_stop(&perf_counters);
+    if (myID == thread0_id) {
+      pc_start(&perf_counters);
+      *curr_img = cvQueryFrame(web_cam_cap);
+      pc_stop(&perf_counters);
 
-    cap_time = perf_counters.cycles.count;
-    sobel_l1cm = perf_counters.l1_misses.count;
-    sobel_ic = perf_counters.ic.count;
+      cap_time = perf_counters.cycles.count;
+      sobel_l1cm = perf_counters.l1_misses.count;
+      sobel_ic = perf_counters.ic.count;
+    }
 
     // Lab1, part 2: Start parallel section
-    if (myID == thread0_id) {
-      pc_start(&perf_counters);
-      grayScale(src, img_gray);
-      pc_stop(&perf_counters);
+    // pthread_barrier_wait(&syncSobel1);
+    // // a holder to do calculations with
+    temp = *curr_img;
+    // pc_start(&perf_counters);
+    grayScale(temp, *curr_img, (myID == thread0_id) ? 0 : 1);
+    // pc_stop(&perf_counters);
 
-      gray_time = perf_counters.cycles.count;
+    // gray_time = perf_counters.cycles.count;
 
-      sobel_l1cm += perf_counters.l1_misses.count;
-      sobel_ic += perf_counters.ic.count;
-    }
+    // sobel_l1cm += perf_counters.l1_misses.count;
+    // sobel_ic += perf_counters.ic.count;
 
-    if (myID != thread0_id) {
-      pc_start(&perf_counters);
-      sobelCalc(img_gray, img_sobel);
-      pc_stop(&perf_counters);
+    // // sync up
+    // pthread_barrier_wait(&syncSobel2);
+    // temp = *curr_img;
 
-      sobel_time = perf_counters.cycles.count;
-    }
-    pthread_barrier_wait(&endSobel);
+    // pc_start(&perf_counters);
+    // sobelCalc(temp, *curr_img, (myID == thread0_id) ? 0 : 1);
+    // pc_stop(&perf_counters);
+
+    // sobel_time = perf_counters.cycles.count;
     // Lab1, part2: End parallel section
 
-    pc_start(&perf_counters);
-    namedWindow(top, CV_WINDOW_AUTOSIZE);
-    imshow(top, img_sobel);
-    pc_stop(&perf_counters);
-
-    disp_time = perf_counters.cycles.count;
-    sobel_l1cm += perf_counters.l1_misses.count;
-    sobel_ic += perf_counters.ic.count;
-
     if (myID == thread0_id) {
-      cap_total += cap_time;
-      gray_total += gray_time;
-      sobel_total += sobel_time;
-      sobel_l1cm_total += sobel_l1cm;
-      sobel_ic_total += sobel_ic;
-      disp_total += disp_time;
-      total_fps += PROC_FREQ/float(cap_time + gray_time + sobel_time);
-      total_ipc += float(sobel_ic/float(gray_time + sobel_time));
+      pc_start(&perf_counters);
+      namedWindow(top, CV_WINDOW_AUTOSIZE);
+      imshow(top, *curr_img);
+      pc_stop(&perf_counters);
     }
+
+    // disp_time = perf_counters.cycles.count;
+    // sobel_l1cm += perf_counters.l1_misses.count;
+    // sobel_ic += perf_counters.ic.count;
+
+    // cap_total += cap_time;
+    // gray_total += gray_time;
+    // sobel_total += sobel_time;
+    // sobel_l1cm_total += sobel_l1cm;
+    // sobel_ic_total += sobel_ic;
+    // disp_total += disp_time;
+    // total_fps += PROC_FREQ/float(cap_time + gray_time + sobel_time);
+    // total_ipc += float(sobel_ic/float(gray_time + sobel_time));
 
     // Press q to exit
     char c = cvWaitKey(5);
@@ -132,7 +139,6 @@ void *runSobelMT(void *ptr)
   if (myID == thread0_id) {
     total_epf = PROC_EPC*NCORES/(total_fps/i);
     float total_time = float(gray_total + sobel_total + cap_total + disp_total);
-
 
     results_file.open("sobel_perf_mt.csv", ios::out);
     results_file << "Percent of time per function" << endl;
@@ -152,8 +158,9 @@ void *runSobelMT(void *ptr)
     results_file << "Instruction count per frame, " << sobel_ic_total/i << endl;
 
     results_file.close();
+    cvReleaseCapture(&web_cam_cap);
   }
 
-  cvReleaseCapture(&web_cam_cap);
+  pthread_barrier_wait(&endSobel);
   return NULL;
 }
