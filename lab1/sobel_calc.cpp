@@ -11,15 +11,13 @@ using namespace cv;
 void grayScale(Mat& img, Mat& img_gray_out, int mt_thread /*default -1*/)
 {
   // Convert to grayscale
-  if(mt_thread <= 0){
-    printf("%d\n", mt_thread);
     for (int i=0; i<img.rows; i++) {
       for (int j=0; j<img.cols; j++) {
-        img_gray_out.data[IMG_WIDTH*i + j] = .114*img.data[STEP0*i + STEP1*j] + 
-    .587*img.data[STEP0*i + STEP1*j + 1]+
-    .299*img.data[STEP0*i + STEP1*j + 2];
+  //       img_gray_out.data[IMG_WIDTH*i + j] = .114*img.data[STEP0*i + STEP1*j] + 
+  // .587*img.data[STEP0*i + STEP1*j + 1]+
+  // .299*img.data[STEP0*i + STEP1*j + 2];
+        img_gray_out.data[IMG_WIDTH*i + j] = 1;
       }
-    }
   }
   // int start_i = mt_thread > 0 ? img.rows*mt_thread/NUM_THREADS : 0;
   // int end_i = mt_thread >= 0 ? (mt_thread+1)*img.rows/NUM_THREADS : img.rows;

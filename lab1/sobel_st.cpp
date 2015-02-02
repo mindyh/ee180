@@ -22,7 +22,6 @@ using namespace cv;
 static ofstream results_file;
 
 // Define image mats to pass between function calls
-static Mat img_gray, img_sobel;
 static float total_fps, total_ipc, total_epf;
 static float gray_total, sobel_total, cap_total, disp_total;
 static float sobel_ic_total, sobel_l1cm_total;
@@ -56,11 +55,11 @@ void runSobelST()
   // Keep track of the frames
   int i = 0;
 
-  while (1) {
-    // Allocate memory to hold grayscale and sobel images
-    img_gray = Mat(IMG_HEIGHT, IMG_WIDTH, CV_8UC1);
-    img_sobel = Mat(IMG_HEIGHT, IMG_WIDTH, CV_8UC1);
+  // Allocate memory to hold grayscale and sobel images
+  Mat img_gray = Mat(IMG_HEIGHT, IMG_WIDTH, CV_8UC1);
+  Mat img_sobel = Mat(IMG_HEIGHT, IMG_WIDTH, CV_8UC1);
 
+  while (1) {
     pc_start(&perf_counters);
     src = cvQueryFrame(web_cam_cap);
     pc_stop(&perf_counters);
