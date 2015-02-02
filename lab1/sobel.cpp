@@ -30,9 +30,6 @@ int mainSingleThread()
 
 // This mutex will be used to allow threads to contest for thread 0 status
 pthread_barrier_t endSobel;
-pthread_barrier_t syncSobel1;
-pthread_barrier_t syncSobel2;
-
 pthread_mutex_t thread0 = PTHREAD_MUTEX_INITIALIZER;
 pthread_t thread0_id = 0;
 int mainMultiThread()
@@ -42,18 +39,14 @@ int mainMultiThread()
 
   // Set up a barrier to synchronize both threads at the end of runSobel
   pthread_barrier_init(&endSobel, NULL, 2);
-  pthread_barrier_init(&syncSobel1, NULL, 2);
-  pthread_barrier_init(&syncSobel2, NULL, 2);
-
-  Mat src = Mat(IMG_HEIGHT, IMG_WIDTH, CV_8UC1);
 
   // Call threads
   int ret;
-  if ( (ret = pthread_create( &sobel1, NULL, runSobelMT, (void *)&src)) ){
+  if ( (ret = pthread_create( &sobel1, NULL, runSobelMT, NULL)) ){
     printf("Thread creation failed: %d\n", ret);
     exit(1);
   }
-  if ( (ret = pthread_create( &sobel2, NULL, runSobelMT, (void *)&src)) ){
+  if ( (ret = pthread_create( &sobel2, NULL, runSobelMT, NULL)) ){
     printf("Thread creation failed: %d\n", ret);
     exit(1);
   }
@@ -64,8 +57,6 @@ int mainMultiThread()
 
   // Destroy the barriers
   pthread_barrier_destroy(&endSobel);
-  pthread_barrier_destroy(&syncSobel1);
-  pthread_barrier_destroy(&syncSobel2);
 
   // Return ok if sobel returns correctly
   return 0;
