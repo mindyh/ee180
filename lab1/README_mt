@@ -1,0 +1,24 @@
+Mindy Huang and Nick Freybler
+Zedboard 3
+Multi Thread Optimizations:
+--
+From Single Thread (all these are the stame from single thread optimizations):
+	Makefile: 
+		- added an -Ofast optimization flag. This helped a lot - the compiler optimized a lot of instructions for us elsewhere in the code.
+		- removed the -fno-tree-vectorize flag. 
+
+	grayScale():
+		- removed intermediate variable 'color'
+
+	sobelCalc():
+		- moved calculations for y and total in to the for-loop for the x calculation. This saves having to loop through the same image 3 times.
+		- removed intermediary variables: instead of creating temporary variables to name and hold calculations for x and y like any sane software engineer, we added and assigned x and y to total in one step. Not sure if this actually achieved anything, as this micro-optimization is something the compiler should handle.
+
+MultiThreading in sobel_mt.cpp:
+		- made sure that only one thread (denoted by "thread0_id") could access the camera and opencv capturing functions
+		- created two local "Mat" variables in the style of ROI's (Region of Interest). These consist of the top half and bottom half of the src Mat file, which comes from the camera capture. They are assigned to thread0 and thread1 respectively.
+			- this is effective because we are not creating copies of each half of the camera image, but instead are actually just pointers to the beginning and halfway down the matrix, respectively
+		- we have both threads concurrently apply grayscale() to their respective halves of the image capture. They then sync up, and once again concurrently apply sobel_calc() to their respective halves as well.
+			- we chose to do top half and bottom half (rather than left half and right half) of the Mat because of how grayscale() and sobel_calc() operate and how Mat files are arranged. Though the mat file is a "matrix", the data is still ordered linearly one row at a time. grayscale() and sobel_calc() assume this and operate linearly, thereby making the calculations model arrays/vectors. If we had not done this, the two functions would be operating on chunks of data separated by one half the width of the matrix rather than chunks placed right next to each other
+		- finally, thread0 displays the total image, which turns out perfectly.
+		- timing operations are incremented by only one of the threads. If both were to increment the time, we would have little "reported" speed-up, given that we are multiplying the time taken by two.
