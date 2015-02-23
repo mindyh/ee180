@@ -24,6 +24,7 @@ boot:
     nop
     nop
     sll     $t1, $t0, 4         # B = 0xdeaf0123 << 4 = 0xeaf01230
+    
     lui     $t2, 0xeaf0         # C = 0xeaf01231
     nop
     ori     $t2, $t2, 0x1231

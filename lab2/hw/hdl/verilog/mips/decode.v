@@ -86,9 +86,11 @@ module decode (
     wire isSRL = (op == `SPECIAL) & (funct == `SRL);
     wire isSLLV = (op == `SPECIAL) & (funct == `SLLV);
     wire isSRLV = (op == `SPECIAL) & (funct == `SRLV);
+    wire isSRA = (op == `SPECIAL) & (funct == `SRA);
+    wire isSRAV = (op == `SPECIAL) & (funct == `SRAV);
 
-    wire isShiftImm = isSLL | isSRL;
-    wire isShift = isShiftImm | isSLLV | isSRLV;
+    wire isShiftImm = isSLL | isSRL | isSRA;
+    wire isShift = isShiftImm | isSLLV | isSRLV | isSRAV;
 
 //******************************************************************************
 // ALU instructions decode / control signal for ALU datapath
@@ -115,14 +117,18 @@ module decode (
             {`SPECIAL, `SUBU}:  alu_opcode = `ALU_SUBU;
             {`SPECIAL, `AND}:   alu_opcode = `ALU_AND;
             {`SPECIAL, `OR}:    alu_opcode = `ALU_OR;
+            {`SPECIAL2, `MUL}:   alu_opcode = `ALU_MUL;
             {`SPECIAL, `MOVN}:  alu_opcode = `ALU_PASSX;
-            {`SPECIAL, `MOVZ}:  alu_opcode = `ALU_PASSX;
+            {`SPECIAL, `MOVZ}:  alu_opcode = `ALU_PASSX; 
             {`SPECIAL, `SLT}:   alu_opcode = `ALU_SLT;
             {`SPECIAL, `SLTU}:  alu_opcode = `ALU_SLTU;
             {`SPECIAL, `SLL}:   alu_opcode = `ALU_SLL;
             {`SPECIAL, `SRL}:   alu_opcode = `ALU_SRL;
+            {`SPECIAL, `SRA}:   alu_opcode = `ALU_SRA;
+            {`SPECIAL, `SRAV}:  alu_opcode = `ALU_SRA;
             {`SPECIAL, `SLLV}:  alu_opcode = `ALU_SLL;
             {`SPECIAL, `SRLV}:  alu_opcode = `ALU_SRL;
+            {`SPECIAL, `XOR}:   alu_opcode = `ALU_XOR;
             // compare rs data to 0, only care about 1 operand
             {`BGTZ, `DC6}:      alu_opcode = `ALU_PASSX;
             {`BLEZ, `DC6}:      alu_opcode = `ALU_PASSX;
@@ -148,9 +154,10 @@ module decode (
     wire use_imm = &{op != `SPECIAL, op != `SPECIAL2, op != `BNE, op != `BEQ}; // where to get 2nd ALU operand from: 0 for RtData, 1 for Immediate
 
     wire [31:0] imm_sign_extend = {{16{immediate[15]}}, immediate};
+    wire [31:0] imm_no_extend = {16'b0, immediate};
     wire [31:0] imm_upper = {immediate, 16'b0};
 
-    wire [31:0] imm = (op == `LUI) ? imm_upper : imm_sign_extend;
+    wire [31:0] imm = (op == `LUI) ? imm_upper : (op == `ORI || op == `ANDI) ? imm_no_extend : imm_sign_extend;
 
 //******************************************************************************
 // forwarding and stalling logic

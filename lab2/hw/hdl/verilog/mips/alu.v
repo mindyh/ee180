@@ -21,26 +21,33 @@ module alu (
 //******************************************************************************
     wire signed [31:0] alu_op_x_signed = alu_op_x;
     wire signed [31:0] alu_op_y_signed = alu_op_y;
+    reg  signed [31:0] alu_op_y_reg_signed;
+
 
 //******************************************************************************
 // ALU datapath
 //******************************************************************************
 
     always @* begin
+        // needed for SRA
+        alu_op_y_reg_signed = alu_op_y;
         case (alu_opcode)
             // PERFORM ALU OPERATIONS DEFINED ABOVE
             `ALU_ADD:   alu_result = alu_op_x + alu_op_y;
             `ALU_ADDU:  alu_result = alu_op_x + alu_op_y;
             `ALU_AND:   alu_result = alu_op_x & alu_op_y;
             `ALU_OR:    alu_result = alu_op_x | alu_op_y;
+            `ALU_MUL:   alu_result = alu_op_x_signed * alu_op_y_signed;
             `ALU_SUB:   alu_result = alu_op_x - alu_op_y;
             `ALU_SUBU:  alu_result = alu_op_x - alu_op_y;
             `ALU_SLTU:  alu_result = alu_op_x < alu_op_y;
             `ALU_SLT:   alu_result = alu_op_x_signed < alu_op_y_signed;
             `ALU_SRL:   alu_result = alu_op_y >> alu_op_x[4:0]; // shift operations are Y >> X
             `ALU_SLL:   alu_result = alu_op_y << alu_op_x[4:0];
+            `ALU_SRA:   alu_result = alu_op_y_reg_signed >>> alu_op_x[4:0]; // arith right shift
             `ALU_PASSX: alu_result = alu_op_x;
             `ALU_PASSY: alu_result = alu_op_y;
+            `ALU_XOR:   alu_result = alu_op_x ^ alu_op_y;
             default:    alu_result = 32'hxxxxxxxx;   // undefined
         endcase
     end

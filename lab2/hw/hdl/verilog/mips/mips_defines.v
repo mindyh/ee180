@@ -50,7 +50,7 @@
 `define MOVZ  6'b001010
 `define MUL   6'b000010
 `define XOR   6'b100110
-`define NOR   6'b100111
+`define NOR   6'b100111 
 `define SLT   6'b101010
 `define SLTU  6'b101011
 `define DC6   6'bxxxxxx
