@@ -41,7 +41,7 @@ boot:
     nop
     nop
 
-    sltiu $v0, $v0, 1       # v0 < 1 is true
+    slti $v0, $v0, 1       # v0 < 1 is true
     nop
     nop
 

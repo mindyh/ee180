@@ -104,6 +104,7 @@ module decode (
             {`SLTIU, `DC6}:     alu_opcode = `ALU_SLTU;
             {`ANDI, `DC6}:      alu_opcode = `ALU_AND;
             {`ORI, `DC6}:       alu_opcode = `ALU_OR;
+            {`XORI, `DC6}:      alu_opcode = `ALU_XOR;
             {`LW, `DC6}:        alu_opcode = `ALU_ADD;
             {`LB, `DC6}:        alu_opcode = `ALU_ADD;
             {`LBU, `DC6}:       alu_opcode = `ALU_ADD;
@@ -116,8 +117,9 @@ module decode (
             {`SPECIAL, `SUB}:   alu_opcode = `ALU_SUB;
             {`SPECIAL, `SUBU}:  alu_opcode = `ALU_SUBU;
             {`SPECIAL, `AND}:   alu_opcode = `ALU_AND;
+            {`SPECIAL, `NOR}:   alu_opcode = `ALU_NOR;
             {`SPECIAL, `OR}:    alu_opcode = `ALU_OR;
-            {`SPECIAL2, `MUL}:   alu_opcode = `ALU_MUL;
+            {`SPECIAL2,`MUL}:   alu_opcode = `ALU_MUL;
             {`SPECIAL, `MOVN}:  alu_opcode = `ALU_PASSX;
             {`SPECIAL, `MOVZ}:  alu_opcode = `ALU_PASSX; 
             {`SPECIAL, `SLT}:   alu_opcode = `ALU_SLT;
@@ -157,7 +159,7 @@ module decode (
     wire [31:0] imm_no_extend = {16'b0, immediate};
     wire [31:0] imm_upper = {immediate, 16'b0};
 
-    wire [31:0] imm = (op == `LUI) ? imm_upper : (op == `ORI || op == `ANDI) ? imm_no_extend : imm_sign_extend;
+    wire [31:0] imm = (op == `LUI) ? imm_upper : (op == `ORI || op == `ANDI || op == `XORI) ? imm_no_extend : imm_sign_extend;
 
 //******************************************************************************
 // forwarding and stalling logic
