@@ -1,3 +1,4 @@
+
 //=============================================================================
 // EE108B Lab 2
 //
@@ -30,6 +31,9 @@ module decode (
     output wire movz,
     output wire [4:0] rs_addr,
     output wire [4:0] rt_addr,
+
+    output wire isJR,
+    output wire [31:0] branch_imm,
 
     output wire stall,
 
@@ -76,7 +80,8 @@ module decode (
 // jump instructions decode
 //******************************************************************************
 
-    wire isJ    = (op == `J);
+    wire   isJ    = (op == `J);
+    assign isJR   = funct == `JR & op == `SPECIAL;
 
 //******************************************************************************
 // shift instruction decode
@@ -146,7 +151,7 @@ module decode (
             // or immediate with 0
             {`LUI, `DC6}:       alu_opcode = `ALU_PASSY;
             default:            alu_opcode = `ALU_PASSX;
-    	endcase
+        endcase
     end
 
 //******************************************************************************
@@ -160,6 +165,8 @@ module decode (
     wire [31:0] imm_upper = {immediate, 16'b0};
 
     wire [31:0] imm = (op == `LUI) ? imm_upper : (op == `ORI || op == `ANDI || op == `XORI) ? imm_no_extend : imm_sign_extend;
+
+    assign branch_imm = imm;
 
 //******************************************************************************
 // forwarding and stalling logic
@@ -212,7 +219,7 @@ module decode (
 // Memory control
 //******************************************************************************
     assign mem_we = |{op == `SW, op == `SB};    // write to memory
-    assign mem_read = 1'b0;                     // use memory data for writing to a register
+    assign mem_read = |{op == `LB, op == `LBU, op == `LW};// use memory data for writing to a register
     assign mem_byte = |{op == `SB, op == `LB, op == `LBU};    // memory operations use only one byte
     assign mem_signextend = ~|{op == `LBU};     // sign extend sub-word memory reads
 
@@ -223,7 +230,10 @@ module decode (
     wire isEqual = rs_data == rt_data;
 
     assign jump_branch = |{isBEQ & isEqual,
-                           isBNE & ~isEqual};
+                           isBNE & ~isEqual,
+                           isBGEZNL & ~rs_data[31],
+                           isBLEZ & ((rs_data[31]) | (rs_data == 0)),
+                           isBLTZNL & rs_data[31]};
 
     assign jump_target = isJ;
     assign jump_reg = 1'b0;

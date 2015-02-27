@@ -21,10 +21,13 @@ boot:
     ori     $s1, $0, 1          # Prepare the 'done' status
     ori     $t0, $0, 1
     ori     $v0, $0, 0          # The test result starts as a failure
-    bne     $t0, $0, $target_ne
     nop
+    nop
+    bne     $t0, $0, $target_ne
 
 $finish:
+    nop
+    nop
     sw      $v0, 4($s0)
     sw      $s1, 0($s0)
 
