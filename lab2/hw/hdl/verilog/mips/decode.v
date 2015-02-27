@@ -31,6 +31,9 @@ module decode (
     output wire [4:0] rs_addr,
     output wire [4:0] rt_addr,
 
+    output wire isJR,
+    output wire [31:0] branch_imm,
+
     output wire stall,
 
     input reg_we_ex,
@@ -76,7 +79,8 @@ module decode (
 // jump instructions decode
 //******************************************************************************
 
-    wire isJ    = (op == `J);
+    wire   isJ    = (op == `J);
+    assign isJR   = funct == `JR & op == `SPECIAL;
 
 //******************************************************************************
 // shift instruction decode
@@ -159,6 +163,8 @@ module decode (
 
     wire [31:0] imm = (op == `LUI) ? imm_upper : (op == `ORI || op == `ANDI) ? imm_no_extend : imm_sign_extend;
 
+    assign branch_imm = imm;
+
 //******************************************************************************
 // forwarding and stalling logic
 //******************************************************************************
@@ -210,7 +216,7 @@ module decode (
 // Memory control
 //******************************************************************************
     assign mem_we = |{op == `SW, op == `SB};    // write to memory
-    assign mem_read = 1'b0;                     // use memory data for writing to a register
+    assign mem_read = |{op == `LB, op == `LBU, op == `LW};// use memory data for writing to a register
     assign mem_byte = |{op == `SB, op == `LB, op == `LBU};    // memory operations use only one byte
     assign mem_signextend = ~|{op == `LBU};     // sign extend sub-word memory reads
 
@@ -221,7 +227,10 @@ module decode (
     wire isEqual = rs_data == rt_data;
 
     assign jump_branch = |{isBEQ & isEqual,
-                           isBNE & ~isEqual};
+                           isBNE & ~isEqual,
+                           isBGEZNL & ~rs_data[31],
+                           isBLEZ & ((rs_data[31]) | (rs_data == 0)),
+                           isBLTZNL & rs_data[31]};
 
     assign jump_target = isJ;
     assign jump_reg = 1'b0;

@@ -50,13 +50,24 @@ module mips_cpu (
         .clk            (clk),
         .rst            (rst),
         .en             (en_if),
-        .jump_target    (jump_target_id),
         .pc_id          (pc_id),
-        .instr_id       (instr_id[25:0]),
-        .pc             (pc_if)
+        .pc             (pc_if),
+
+        .jump_target    (jump_target_id),
+        .jump_imm       ((isJR) ? jr_pc_id : {6'b000000,instr_id[25:0]}),
+
+        .jump_reg       (isJR),
+        .jump_branch    (jump_branch_id),
+        .branch_imm     (branch_imm_id)
     );
 
     assign pc = pc_if; // output pc to parent module
+
+    // needed for branch logic
+    wire [31:0] branch_imm_id;
+
+    // needed for jump logic
+    wire isJR;
 
     // needed for D stage
     dffare #(32) pc_if2id (.clk(clk), .r(rst), .en(en_if), .d(pc_if), .q(pc_id));
@@ -95,6 +106,9 @@ module mips_cpu (
         .rt_addr            (rt_addr_id),
         .stall              (stall),
 
+        .branch_imm         (branch_imm_id),
+        .isJR               (isJR),
+
         // inputs for forwarding/stalling from X
         .reg_we_ex          (reg_we_ex),
         .reg_write_addr_ex  (reg_write_addr_ex),
@@ -120,6 +134,7 @@ module mips_cpu (
     dffarre mem_read_id2ex (.clk(clk), .ar(rst), .r(rst_id), .en(en), .d(1'b0), .q());
     dffarre mem_byte_id2ex (.clk(clk), .ar(rst), .r(rst_id), .en(en), .d(mem_byte_id), .q(mem_byte_ex));
     dffarre mem_signextend_id2ex (.clk(clk), .ar(rst), .r(rst_id), .en(en), .d(mem_signextend_id), .q(mem_signextend_ex));
+    dffarre mem_mem_read_id2ex (.clk(clk), .ar(rst), .r(rst_id), .en(en), .d(mem_read_id), .q(mem_read_ex));
 
     // needed for W stage
     dffarre #(5) reg_write_addr_id2ex (.clk(clk), .ar(rst), .r(rst_id), .en(en), .d(reg_write_addr_id), .q(reg_write_addr_ex));
@@ -142,14 +157,13 @@ module mips_cpu (
     dffare mem_read_ex2mem (.clk(clk), .r(rst), .en(en), .d(1'b0), .q());
     dffare mem_byte_ex2mem (.clk(clk), .r(rst), .en(en), .d(mem_byte_ex), .q(mem_byte_mem));
     dffare mem_signextend_ex2mem (.clk(clk), .r(rst), .en(en), .d(mem_signextend_ex), .q(mem_signextend_mem));
+    dffarre mem_mem_read_ex2mem (.clk(clk), .ar(rst), .r(rst_id), .en(en), .d(mem_read_ex), .q(mem_read_mem));
 
     // needed for W stage
     dffare #(5) reg_write_addr_ex2mem (.clk(clk), .r(rst), .en(en), .d(reg_write_addr_ex), .q(reg_write_addr_mem));
     dffare reg_we_ex2mem (.clk(clk), .r(rst), .en(en), .d(reg_we_ex), .q(reg_we_mem));
 
-    assign mem_read_ex = 1'b0;
-    assign mem_read_mem = 1'b0;
-    assign mem_read_en = mem_read_ex;
+    assign mem_read_en = mem_read_mem;
     assign mem_write_en[3] = mem_we_ex & (~mem_byte_ex | (mem_addr[1:0] == 2'b00));
     assign mem_write_en[2] = mem_we_ex & (~mem_byte_ex | (mem_addr[1:0] == 2'b01));
     assign mem_write_en[1] = mem_we_ex & (~mem_byte_ex | (mem_addr[1:0] == 2'b10));
