@@ -18,19 +18,27 @@
 boot:
     lui     $s0, 0x8002         # Load the base address of the status/test registers
     ori     $s1, $0, 1          # Prepare the 'done' status
-    slti    $t0, $s0, 0xffff
+    
+    lui   $t0, 0xffff
     nop
-    nop
-<<<<<<< HEAD
-    sw      $t0, 4($s0)         # Set the test result
-=======
-    nop
-
-    slti  $v0, $t0, 1       # 1 since -2 < 1
+    ori   $t0, $t0, 0xfffe
     nop
     nop
 
-    slti  $v1, $t0, 0xffff  # 1 since -2 < -1
+    ori   $t2, $0, 1           
+    nop
+    nop
+
+    slt   $v0, $t0, $t2       # 1 since -2 < 1
+
+    
+    lui   $t3, 0xffff 
+    nop        
+    ori   $t3, $0, 0xffff         
+    nop
+    nop
+
+    slt  $v1, $t0, $t3        # 1 since -2 < -1
     nop
     nop
 
@@ -38,11 +46,17 @@ boot:
     nop
     nop
 
-    slti  $v0, $t0, 0xfffd  # 0 since -2 !< -3
+    lui   $t2, 0xffff         
+    nop
+    ori   $t2, $t2, 0xfffd          
     nop
     nop
+    slt   $v0, $t0, $t2     # 0 since -2 !< -3
 
-    slti $v0, $v0, 1       # v0 < 1 is true
+    ori   $t3, $0, 1          
+    nop
+    nop
+    slt   $v0, $v0, $t3       # v0 < 1 is true
     nop
     nop
 
@@ -51,7 +65,6 @@ boot:
     nop
     
     sw      $v1, 4($s0)         # Set the test result
->>>>>>> dd4a775c5b794cdcc0f45c117d6526334f2db5a9
     sw      $s1, 0($s0)         # Set 'done'
 
 $done:

@@ -1,12 +1,12 @@
 ###############################################################################
-# File         : slti.S
+# File         : xor.S
 # Project      : EE180 Lab 2: MIPS
 #
 # Standards/Formatting:
 #   MIPS gas, soft tab, 80 column
 #
 # Description:
-#   Test the functionality of the 'slti' instruction.
+#   Test the functionality of the 'xor' instruction.
 #
 ###############################################################################
 
@@ -18,40 +18,19 @@
 boot:
     lui     $s0, 0x8002         # Load the base address of the status/test registers
     ori     $s1, $0, 1          # Prepare the 'done' status
-    slti    $t0, $s0, 0xffff
-    nop
-    nop
-<<<<<<< HEAD
-    sw      $t0, 4($s0)         # Set the test result
-=======
-    nop
 
-    slti  $v0, $t0, 1       # 1 since -2 < 1
+    ori     $t0, $0, 0xbeef
     nop
     nop
 
-    slti  $v1, $t0, 0xffff  # 1 since -2 < -1
+    xori     $t3, $t0, 0x5926       # D = xor(A,0x5926)
     nop
     nop
-
-    and   $v1, $v0, $v1
-    nop
-    nop
-
-    slti  $v0, $t0, 0xfffd  # 0 since -2 !< -3
-    nop
-    nop
-
-    slti $v0, $v0, 1       # v0 < 1 is true
-    nop
-    nop
-
-    and   $v1, $v0, $v1
+    xori     $t4, $t3, 0xe7c8       # E = xor(0xe7c8,D) = 0x1
     nop
     nop
     
-    sw      $v1, 4($s0)         # Set the test result
->>>>>>> dd4a775c5b794cdcc0f45c117d6526334f2db5a9
+    sw      $t4, 4($s0)         # Set the test result
     sw      $s1, 0($s0)         # Set 'done'
 
 $done:

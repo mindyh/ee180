@@ -1,12 +1,12 @@
 ###############################################################################
-# File         : slti.S
+# File         : sll.S
 # Project      : EE180 Lab 2: MIPS
 #
 # Standards/Formatting:
 #   MIPS gas, soft tab, 80 column
 #
 # Description:
-#   Test the functionality of the 'slti' instruction.
+#   Test the functionality of the 'sll' instruction.
 #
 ###############################################################################
 
@@ -18,40 +18,25 @@
 boot:
     lui     $s0, 0x8002         # Load the base address of the status/test registers
     ori     $s1, $0, 1          # Prepare the 'done' status
-    slti    $t0, $s0, 0xffff
-    nop
-    nop
-<<<<<<< HEAD
-    sw      $t0, 4($s0)         # Set the test result
-=======
-    nop
-
-    slti  $v0, $t0, 1       # 1 since -2 < 1
-    nop
-    nop
-
-    slti  $v1, $t0, 0xffff  # 1 since -2 < -1
-    nop
-    nop
-
-    and   $v1, $v0, $v1
-    nop
-    nop
-
-    slti  $v0, $t0, 0xfffd  # 0 since -2 !< -3
-    nop
-    nop
-
-    slti $v0, $v0, 1       # v0 < 1 is true
-    nop
-    nop
-
-    and   $v1, $v0, $v1
-    nop
-    nop
     
-    sw      $v1, 4($s0)         # Set the test result
->>>>>>> dd4a775c5b794cdcc0f45c117d6526334f2db5a9
+    lui     $t0, 0xdeaf         # A = 0xdeafbeef
+    nop
+    ori     $t0, $t0, 0x0123
+
+    ori     $t1, $0, 4          
+    nop
+    nop
+
+    sllv    $t2, $t0, $t1       # B = 0xdeaf0123 << 4 = 0xeaf01230
+    
+    lui     $t3, 0xeaf0         # C = 0xeaf01231
+    nop
+    ori     $t3, $t3, 0x1231
+    nop
+    subu    $t4, $t3, $t2       # D = C - B = 1
+    nop
+    nop
+    sw      $t4, 4($s0)         # Set the test result
     sw      $s1, 0($s0)         # Set 'done'
 
 $done:

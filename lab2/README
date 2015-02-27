@@ -2,11 +2,14 @@ TODO: Write your lab report here. See the handout for more information.
 
 
 
+
 - Needed to change sign extend so not all immediates are sign extended (decode.v)
 
-- ori, andi shouldn't be sign extended
+- xori, ori, andi shouldn't be sign extended
 - change ori tests to reflect this 
-- andi, sltiu, addiu already have tests for sign extension
+- andi, addiu already have tests for sign extension
 - needed to add SRA and SRAV to decode, alu, and isShiftImm and isShift
 - overflow checking for add and sub are already handled
 - need to add mul to decode and alu. uses Special2 instead of Special, for some reason
+- need to create tests and such for addi, nor, or, xori, slt, sltu, sllv
+- sltiu and slti have incorrect tests

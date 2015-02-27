@@ -1,14 +1,15 @@
 ###############################################################################
-# File         : slti.S
+# File         : add.S
 # Project      : EE180 Lab 2: MIPS
 #
 # Standards/Formatting:
 #   MIPS gas, soft tab, 80 column
 #
 # Description:
-#   Test the functionality of the 'slti' instruction.
+#   Test the functionality of the 'add' instruction.
 #
 ###############################################################################
+
 
     .section .boot, "x"
     .balign 4
@@ -18,40 +19,22 @@
 boot:
     lui     $s0, 0x8002         # Load the base address of the status/test registers
     ori     $s1, $0, 1          # Prepare the 'done' status
-    slti    $t0, $s0, 0xffff
+    
+    lui     $t0, 0xffff         # A = 0xfffffffd (-3)
     nop
-    nop
-<<<<<<< HEAD
-    sw      $t0, 4($s0)         # Set the test result
-=======
-    nop
-
-    slti  $v0, $t0, 1       # 1 since -2 < 1
-    nop
-    nop
-
-    slti  $v1, $t0, 0xffff  # 1 since -2 < -1
-    nop
-    nop
-
-    and   $v1, $v0, $v1
-    nop
-    nop
-
-    slti  $v0, $t0, 0xfffd  # 0 since -2 !< -3
-    nop
-    nop
-
-    slti $v0, $v0, 1       # v0 < 1 is true
-    nop
-    nop
-
-    and   $v1, $v0, $v1
+    ori     $t0, $t0, 0xfffd
     nop
     nop
     
-    sw      $v1, 4($s0)         # Set the test result
->>>>>>> dd4a775c5b794cdcc0f45c117d6526334f2db5a9
+    addi    $t1, $t0, -2        # t1 = -3 + -2 = -5
+    nop
+    nop
+
+    addi    $t2, $t1, 6         # t2 = -5 + 6 = 1
+    nop
+    nop
+    
+    sw      $t2, 4($s0)         # Set the test result
     sw      $s1, 0($s0)         # Set 'done'
 
 $done:
