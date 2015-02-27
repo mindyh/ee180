@@ -1,1 +1,66 @@
-TODO: Write your lab report here. See the handout for more information.
+Lab 2 Write-Up
+Mindy Huang and Nicholas Freybler
+
+MIPS_CPU
+- Found countless "dangling" wires such as the line of "mem_read_XX". Though they were instantiated, they were
+  not being used to regulate LW and LB. This was promptly changed.
+
+INSTR_FETCH
+- Added functionality and inputs/outputs for:
+	- J, JR, BEQ, BNE, BLEZ, BLTZ, BGEZ
+		- all these functions required simple ternary (multiplexor) operations based on
+		  control signals produced in "decode.v"
+
+DECODE
+- "Dangling wires"
+	- jr_pc for JR functionality
+- Needed to change sign extend so not all immediates are sign extended
+- Added functionality for:
+	- MUL
+		- should have used SPECIAL2 rather than SPECIAL1
+	- SRA, SRAV
+	- BEQ, BNE, BGEZ, BLEZ, BLTZ
+		- jump_branch boolean signal is regulated by the existence of these opcodes
+		  as well as a quick comparison with rs_data
+    - MOVN, MOVZ
+- xori, ori, andi shouldn't be sign extended
+	- change ori tests to reflect this 
+	- andi, addiu already have tests for sign extension
+- overflow checking for add and sub are already handled
+
+ALU
+- Added functionality for: 
+	- MUL
+	- SRA, SRAV
+- Added isShiftImm and isShift
+
+MEMORY
+- Fixed "dangling wires" mentioned in "mips_cpu.v".
+- Also, through manipulation in other modules, added/fixed functionality for:
+	- SB, LW, LB
+
+FORWARDING, STALLS & HAZARD MAINTENANCE
+in "decode.v"
+- forward_rs_mem, forward_rs_ex, forward_rt_mem, forward_rt_ex all tell whether a register is available at a certain stage
+- rs_mem_dependency and rt_mem_dependency tell whether there is a dependency that can make use of the availablility
+  from above
+- using the two above pieces of information, we can use a mux to select whether the current value of rs/rt is sufficient
+  or if we will be using a forwarded signal.  This results in complete forwarding.
+
+- Stalls were a little trickier. There is the obvious one-cycle stall required to happen in the event that we are waiting
+  on a memory read.
+- There is also a second, less-obvious necessary stall which occurs when there are two or more RAW hazards in a row, all
+  of which use the same register.
+
+in "mips_cpu.v"
+- In the event of a stall, it was necessary to implement a delay for the PC, which, once again, was done with the simple
+  addition of a mux at the pc input to if_id pc register. This resulted in the instructions and PC sync'ing up.
+
+TESTING
+- Created tests for ADDI, NOR, OR, XORI, SLT, SLTU, SLLV, SB, MOVN, MOVN
+- Testing not necessary for SW, since SW is used in almost every test, sometimes in succeeding order
+  with the same registers.
+- Modified/fixed tests for SLTIU, SLTI, MOVN
+- Before forward/stall functionality, included two NOPs between every RAW hazard in virtually every test
+- After complete forward/stall functionality, removed all NOPs other than those that needed to follow
+  branches/jumps

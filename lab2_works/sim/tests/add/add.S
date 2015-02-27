@@ -25,12 +25,8 @@ boot:
     ori     $t0, $t0, 0xfffd
     
     ori     $t1, $0, 0x4        # B = 0x4
-    nop
-    nop
     
     add     $t2, $t0, $t1       # C = A+B = 1
-    nop
-    nop
     
     sw      $t2, 4($s0)         # Set the test result
     sw      $s1, 0($s0)         # Set 'done'

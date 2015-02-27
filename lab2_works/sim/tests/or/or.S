@@ -17,19 +17,9 @@
     .ent    boot
 boot:
     lui     $s0, 0x8002         # Load the base address of the status/test registers
-    nop
     ori     $s1, $0, 1          # Prepare the 'done' status
-    nop
-    nop
-
     ori     $t1, $0, 0x0001     # A = 1
-    nop
-    nop
-
     or      $t2, $0, $t1        # B = 1
-    nop
-    nop
-
     sw      $t2, 4($s0)         # Set the test result
     sw      $s1, 0($s0)         # Set 'done'
 

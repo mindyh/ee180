@@ -23,16 +23,10 @@ boot:
     lui     $t0, 0xffff         # A = 0xfffffffd (-3)
     nop
     ori     $t0, $t0, 0xfffd
-    nop
-    nop
     
     addi    $t1, $t0, -2        # t1 = -3 + -2 = -5
-    nop
-    nop
 
     addi    $t2, $t1, 6         # t2 = -5 + 6 = 1
-    nop
-    nop
     
     sw      $t2, 4($s0)         # Set the test result
     sw      $s1, 0($s0)         # Set 'done'

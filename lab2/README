@@ -2,14 +2,21 @@ TODO: Write your lab report here. See the handout for more information.
 
 
 
-
-- Needed to change sign extend so not all immediates are sign extended (decode.v)
-
+Decode
+- Needed to change sign extend so not all immediates are sign extended
+- Added functionality for SRA, SRAV, MUL
+	- should have used SPECIAL2 rather than SPECIAL1
 - xori, ori, andi shouldn't be sign extended
-- change ori tests to reflect this 
-- andi, addiu already have tests for sign extension
-- needed to add SRA and SRAV to decode, alu, and isShiftImm and isShift
+	- change ori tests to reflect this 
+	- andi, addiu already have tests for sign extension
 - overflow checking for add and sub are already handled
-- need to add mul to decode and alu. uses Special2 instead of Special, for some reason
-- need to create tests and such for addi, nor, or, xori, slt, sltu, sllv
-- sltiu and slti have incorrect tests
+
+ALU
+- Added functionality for SRA, SRAV, MUL
+- Added isShiftImm and isShift
+
+TESTING
+- Created tests for ADDI, NOR, OR, XORI, SLT, SLTU, SLLV, SB, MOVN, MOVN
+- Testing not necessary for SW, since SW is used in almost every test
+- Modified/fixed tests for SLTIU, SLTI
+- Before forward/stall functionality, included two NOPs between every RAW hazard in virtually every test
