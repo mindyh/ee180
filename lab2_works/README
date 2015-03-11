@@ -1,6 +1,12 @@
 Lab 2 Write-Up
 Mindy Huang and Nicholas Freybler
 
+We implemented all the instructions - ADD, ADDI, ADDIU, ADDU, AND, ANDI, BEQ, BGEZ, BGTZ, BLEZ, BLTZ, BNE, J, JAL, JALR, JR, LB, LBU, LUI, LW, MOVN, MOVZ, MUL, NOR, OR, ORI, SB, SLL, SLLV,
+SLT, SLTI, SLTIU, SLTU, SRA, SRAV, SRL, SRLV, SUB, SUBU, SW, XOR, XORI.
+
+We will group the changes we made for each instruction by files for ease of reading.
+
+
 MIPS_CPU
 - Found countless "dangling" wires such as the line of "mem_read_XX". Though they were instantiated, they were
   not being used to regulate LW and LB. This was promptly changed.
@@ -18,21 +24,20 @@ DECODE
 - Added functionality for:
 	- MUL
 		- should have used SPECIAL2 rather than SPECIAL1
-	- SRA, SRAV
+	- SRA, SRAV, SLL, SLLV
 	- BEQ, BNE, BGEZ, BLEZ, BLTZ
 		- jump_branch boolean signal is regulated by the existence of these opcodes
 		  as well as a quick comparison with rs_data
     - MOVN, MOVZ
-- xori, ori, andi shouldn't be sign extended
+- XORI, ORI, ANDI shouldn't have the immediates be sign extended
 	- change ori tests to reflect this 
 	- andi, addiu already have tests for sign extension
-- overflow checking for add and sub are already handled
 
 ALU
-- Added functionality for: 
-	- MUL
-	- SRA, SRAV
-- Added isShiftImm and isShift
+- Added MUL, SRA, SLL,  XOR, and a few others to the case statement.
+- Added SLL/V and SRA/V to the isShiftImm and isShift logic
+- Added a reg signed variable to use with SRA/V
+- overflow checking for add and sub are already handled, so we didn't touch that. 
 
 MEMORY
 - Fixed "dangling wires" mentioned in "mips_cpu.v".
@@ -57,10 +62,13 @@ in "mips_cpu.v"
   addition of a mux at the pc input to if_id pc register. This resulted in the instructions and PC sync'ing up.
 
 TESTING
-- Created tests for ADDI, NOR, OR, XORI, SLT, SLTU, SLLV, SB, MOVN, MOVN
+- Created new tests for ADDI, NOR, OR, XORI, SLT, SLTU, SLLV, SB, MOVN, MOVN
+- Modified/fixed tests for SLTIU, SLTI, MOVN. 
+	- The SLTIU and SLTI tests given were incorrect.
+- Extended tests for ORI, SRA/V, and others as necessary
 - Testing not necessary for SW, since SW is used in almost every test, sometimes in succeeding order
   with the same registers.
-- Modified/fixed tests for SLTIU, SLTI, MOVN
-- Before forward/stall functionality, included two NOPs between every RAW hazard in virtually every test
-- After complete forward/stall functionality, removed all NOPs other than those that needed to follow
+- Before we implemented forward/stall functionality, we included two NOPs between every RAW hazard in virtually every test to get the tests to pass
+- After complete forward/stall functionality, we removed all NOPs other than those that needed to follow
   branches/jumps
+- sobel_asm doesn't work yet.
