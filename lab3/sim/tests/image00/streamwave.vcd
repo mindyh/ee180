@@ -1,0 +1,752 @@
+$date
+	Tue Mar 10 21:07:49 2015
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module userlogic_test $end
+$var wire 32 ! data_out [31:0] $end
+$var wire 64 " intermediate_read_data [63:0] $end
+$var wire 32 # ul_instr [31:0] $end
+$var wire 32 $ ul_instr_addr [31:0] $end
+$var wire 64 % ul_read_addr [63:0] $end
+$var wire 32 & ul_read_data [31:0] $end
+$var wire 32 ' ul_status [31:0] $end
+$var wire 32 ( ul_test [31:0] $end
+$var wire 64 ) ul_write_addr [63:0] $end
+$var wire 32 * ul_write_data [31:0] $end
+$var wire 4 + ul_write_en [3:0] $end
+$var reg 1 , clk $end
+$var reg 32 - cycle_count [32:1] $end
+$var integer 32 . dump_vars [31:0] $end
+$var reg 8192 / dump_vars_filename [8192:1] $end
+$var integer 32 0 i [31:0] $end
+$var reg 10 1 image_n_columns [9:0] $end
+$var reg 10 2 image_n_rows [9:0] $end
+$var reg 8192 3 input_buffer_filename [8192:1] $end
+$var reg 8192 4 instr_mem_filename [8192:1] $end
+$var reg 32 5 num_cycles [32:1] $end
+$var reg 33 6 out_end_addr [32:0] $end
+$var reg 33 7 out_start_addr [32:0] $end
+$var integer 32 8 outfile [31:0] $end
+$var reg 8192 9 output_buffer_filename [8192:1] $end
+$var reg 15 : read_addr [14:0] $end
+$var integer 32 ; read_input_buffer [31:0] $end
+$var integer 32 < read_instr_mem [31:0] $end
+$var integer 32 = result [31:0] $end
+$var reg 1 > rst_n $end
+$var reg 8192 ? test_result_filename [8192:1] $end
+$var reg 32 @ ul_command [31:0] $end
+$var integer 32 A write_output_buffer [31:0] $end
+$var integer 32 B write_test_result [31:0] $end
+$scope module instr_mem $end
+$var wire 16 C addr [15:0] $end
+$var wire 1 D clk $end
+$var wire 32 E din [31:0] $end
+$var wire 1 F we $end
+$var reg 32 G dout [31:0] $end
+$upscope $end
+$scope module ul $end
+$var wire 1 D clk $end
+$var wire 32 H command [31:0] $end
+$var wire 32 I instr [31:0] $end
+$var wire 32 J instr_addr [31:0] $end
+$var wire 64 K read_addr [63:0] $end
+$var wire 32 L read_data [31:0] $end
+$var wire 1 M rst_n $end
+$var wire 1 N sobel_go $end
+$var wire 10 O sobel_image_n_cols [9:0] $end
+$var wire 10 P sobel_image_n_rows [9:0] $end
+$var wire 1 Q sobel_reset $end
+$var wire 32 R status [31:0] $end
+$var wire 32 S test [31:0] $end
+$var wire 64 T write_addr [63:0] $end
+$var wire 32 U write_data [31:0] $end
+$var wire 4 V write_en [3:0] $end
+$scope module go_r $end
+$var wire 1 D clk $end
+$var wire 1 W d $end
+$var wire 1 Q r $end
+$var reg 1 X q $end
+$upscope $end
+$scope module sobel $end
+$var wire 1 D clk $end
+$var wire 1 N go $end
+$var wire 32 Y mem2stop_read_data [31:0] $end
+$var wire 10 Z pipe2stop_image_n_cols [9:0] $end
+$var wire 10 [ pipe2stop_image_n_rows [9:0] $end
+$var wire 1 Q reset $end
+$var wire 16 \ sacc2swt_write_data [15:0] $end
+$var wire 2 ] sctl2srow_row_op [1:0] $end
+$var wire 32 ^ sctl2srt_read_addr [31:0] $end
+$var wire 32 _ sctl2swt_write_addr [31:0] $end
+$var wire 2 ` sctl2swt_write_en [1:0] $end
+$var wire 32 a srow2sacc_row1_data [31:0] $end
+$var wire 32 b srow2sacc_row2_data [31:0] $end
+$var wire 32 c srow2sacc_row3_data [31:0] $end
+$var wire 32 d srt2srow_read_data [31:0] $end
+$var wire 64 e stop2mem_read_addr [63:0] $end
+$var wire 64 f stop2mem_write_addr [63:0] $end
+$var wire 32 g stop2mem_write_data [31:0] $end
+$var wire 4 h stop2mem_write_en [3:0] $end
+$var wire 32 i stop2pipe_status [31:0] $end
+$scope module read_transform $end
+$var wire 1 D clk $end
+$var wire 32 j mem2srt_read_data [31:0] $end
+$var wire 1 k read_transform $end
+$var wire 1 Q reset $end
+$var wire 32 l sctl2srt_read_addr [31:0] $end
+$var wire 64 m srt2mem_read_addr [63:0] $end
+$var wire 32 n srt2srow_read_data [31:0] $end
+$var wire 32 o transformed_read_data [31:0] $end
+$scope module read_transform_r $end
+$var wire 1 D clk $end
+$var wire 1 p d $end
+$var wire 1 Q r $end
+$var reg 1 q q $end
+$upscope $end
+$scope begin unpack_read_data[0] $end
+$upscope $end
+$scope begin unpack_read_data[1] $end
+$upscope $end
+$scope begin flip_endian_read_data[0] $end
+$upscope $end
+$scope begin flip_endian_read_data[1] $end
+$upscope $end
+$scope begin flip_endian_read_data[2] $end
+$upscope $end
+$scope begin flip_endian_read_data[3] $end
+$upscope $end
+$scope begin transform_read_address[0] $end
+$upscope $end
+$scope begin transform_read_address[1] $end
+$upscope $end
+$upscope $end
+$scope module write_transform $end
+$var wire 16 r sacc2swt_write_data [15:0] $end
+$var wire 32 s sctl2swt_write_addr [31:0] $end
+$var wire 2 t sctl2swt_write_en [1:0] $end
+$var wire 64 u swt2mem_write_addr [63:0] $end
+$var wire 32 v swt2mem_write_data [31:0] $end
+$var wire 4 w swt2mem_write_en [3:0] $end
+$var wire 32 x transformed_write_data [31:0] $end
+$var wire 1 y write_transform $end
+$scope begin unpack_write_data[0] $end
+$upscope $end
+$scope begin unpack_write_data[1] $end
+$upscope $end
+$scope begin write_transform_internal[0] $end
+$upscope $end
+$scope begin write_transform_internal[1] $end
+$upscope $end
+$scope begin write_transform_address_output[0] $end
+$upscope $end
+$scope begin write_transform_address_output[1] $end
+$upscope $end
+$scope begin write_transform_en_output[0] $end
+$upscope $end
+$scope begin write_transform_en_output[1] $end
+$upscope $end
+$scope begin write_transform_en_output[2] $end
+$upscope $end
+$scope begin write_transform_en_output[3] $end
+$upscope $end
+$upscope $end
+$scope module control $end
+$var wire 32 z buf_read_offset [31:0] $end
+$var wire 32 { buf_write_offset [31:0] $end
+$var wire 10 | buf_write_row_incr [9:0] $end
+$var wire 1 D clk $end
+$var wire 10 } col_strip [9:0] $end
+$var wire 10 ~ control_n_cols [9:0] $end
+$var wire 10 !" control_n_rows [9:0] $end
+$var wire 1 N go $end
+$var wire 10 "" max_col_strip [9:0] $end
+$var wire 10 #" next_col_strip [9:0] $end
+$var wire 2 $" pixel_write_en [1:0] $end
+$var wire 1 Q reset $end
+$var wire 10 %" row_counter [9:0] $end
+$var wire 2 &" sctl2srow_row_op [1:0] $end
+$var wire 32 '" sctl2srt_read_addr [31:0] $end
+$var wire 32 (" sctl2stop_status [31:0] $end
+$var wire 32 )" sctl2swt_write_addr [31:0] $end
+$var wire 2 *" sctl2swt_write_en [1:0] $end
+$var wire 4 +" state [3:0] $end
+$var wire 10 ," stop2sctl_image_n_cols [9:0] $end
+$var wire 10 -" stop2sctl_image_n_rows [9:0] $end
+$var reg 32 ." buf_read_offset_next [31:0] $end
+$var reg 1 /" buf_write_en $end
+$var reg 32 0" buf_write_offset_next [31:0] $end
+$var reg 10 1" col_strip_next [9:0] $end
+$var reg 10 2" row_counter_next [9:0] $end
+$var reg 2 3" row_op [1:0] $end
+$var reg 4 4" state_next [3:0] $end
+$scope module state_r $end
+$var wire 1 D clk $end
+$var wire 4 5" d [3:0] $end
+$var wire 1 Q r $end
+$var reg 4 6" q [3:0] $end
+$upscope $end
+$scope module control_n_rows_r $end
+$var wire 1 D clk $end
+$var wire 10 7" d [9:0] $end
+$var wire 1 8" en $end
+$var wire 1 Q r $end
+$var reg 10 9" q [9:0] $end
+$upscope $end
+$scope module control_n_cols_r $end
+$var wire 1 D clk $end
+$var wire 10 :" d [9:0] $end
+$var wire 1 ;" en $end
+$var wire 1 Q r $end
+$var reg 10 <" q [9:0] $end
+$upscope $end
+$scope module row_counter_r $end
+$var wire 1 D clk $end
+$var wire 10 =" d [9:0] $end
+$var wire 1 N en $end
+$var wire 1 Q r $end
+$var reg 10 >" q [9:0] $end
+$upscope $end
+$scope module col_strip_r $end
+$var wire 1 D clk $end
+$var wire 10 ?" d [9:0] $end
+$var wire 1 N en $end
+$var wire 1 Q r $end
+$var reg 10 @" q [9:0] $end
+$upscope $end
+$scope module buf_read_offset_r $end
+$var wire 1 D clk $end
+$var wire 32 A" d [31:0] $end
+$var wire 1 N en $end
+$var wire 1 Q r $end
+$var reg 32 B" q [31:0] $end
+$upscope $end
+$scope module buf_write_offset_r $end
+$var wire 1 D clk $end
+$var wire 32 C" d [31:0] $end
+$var wire 1 N en $end
+$var wire 1 Q r $end
+$var reg 32 D" q [31:0] $end
+$upscope $end
+$scope begin sobel_write_en[0] $end
+$upscope $end
+$scope begin sobel_write_en[1] $end
+$upscope $end
+$upscope $end
+$scope module row_reg $end
+$var wire 1 D clk $end
+$var wire 1 N go $end
+$var wire 1 Q reset $end
+$var wire 32 E" row1 [31:0] $end
+$var wire 32 F" row2 [31:0] $end
+$var wire 32 G" row3 [31:0] $end
+$var wire 2 H" sctl2srow_row_op [1:0] $end
+$var wire 32 I" srow2sacc_row1_data [31:0] $end
+$var wire 32 J" srow2sacc_row2_data [31:0] $end
+$var wire 32 K" srow2sacc_row3_data [31:0] $end
+$var wire 32 L" srt2srow_read_data [31:0] $end
+$var reg 32 M" row1_next [31:0] $end
+$var reg 32 N" row2_next [31:0] $end
+$var reg 32 O" row3_next [31:0] $end
+$scope module row1_r $end
+$var wire 1 D clk $end
+$var wire 32 P" d [31:0] $end
+$var wire 1 N en $end
+$var wire 1 Q r $end
+$var reg 32 Q" q [31:0] $end
+$upscope $end
+$scope module row2_r $end
+$var wire 1 D clk $end
+$var wire 32 R" d [31:0] $end
+$var wire 1 N en $end
+$var wire 1 Q r $end
+$var reg 32 S" q [31:0] $end
+$upscope $end
+$scope module row3_r $end
+$var wire 1 D clk $end
+$var wire 32 T" d [31:0] $end
+$var wire 1 N en $end
+$var wire 1 Q r $end
+$var reg 32 U" q [31:0] $end
+$upscope $end
+$upscope $end
+$scope module accelerator $end
+$var wire 32 V" row1 [31:0] $end
+$var wire 32 W" row2 [31:0] $end
+$var wire 32 X" row3 [31:0] $end
+$var wire 16 Y" sacc2swt_write_data [15:0] $end
+$var wire 32 Z" srow2sacc_row1_data [31:0] $end
+$var wire 32 [" srow2sacc_row2_data [31:0] $end
+$var wire 32 \" srow2sacc_row3_data [31:0] $end
+$var reg 16 ]" sobel_out [15:0] $end
+$scope begin convolve[0] $end
+$upscope $end
+$scope begin convolve[1] $end
+$upscope $end
+$upscope $end
+$upscope $end
+$upscope $end
+$scope begin input_buffer_gen[0] $end
+$var wire 15 ^" adjusted_ul_read_addr [14:0] $end
+$scope module input_buffer $end
+$var wire 15 _" addr [14:0] $end
+$var wire 1 D clk $end
+$var wire 32 `" din [31:0] $end
+$var wire 1 a" we $end
+$var reg 32 b" dout [31:0] $end
+$upscope $end
+$upscope $end
+$scope begin input_buffer_gen[1] $end
+$var wire 15 c" adjusted_ul_read_addr [14:0] $end
+$scope module input_buffer $end
+$var wire 15 d" addr [14:0] $end
+$var wire 1 D clk $end
+$var wire 32 e" din [31:0] $end
+$var wire 1 f" we $end
+$var reg 32 g" dout [31:0] $end
+$upscope $end
+$upscope $end
+$scope begin output_buffer_gen[0] $end
+$scope module output_buffer $end
+$var wire 15 h" addr [14:0] $end
+$var wire 1 D clk $end
+$var wire 16 i" din [15:0] $end
+$var wire 2 j" we [1:0] $end
+$var reg 16 k" dout [15:0] $end
+$scope begin column[0] $end
+$upscope $end
+$scope begin column[1] $end
+$upscope $end
+$upscope $end
+$scope begin genblk3 $end
+$upscope $end
+$upscope $end
+$scope begin output_buffer_gen[1] $end
+$scope module output_buffer $end
+$var wire 15 l" addr [14:0] $end
+$var wire 1 D clk $end
+$var wire 16 m" din [15:0] $end
+$var wire 2 n" we [1:0] $end
+$var reg 16 o" dout [15:0] $end
+$scope begin column[0] $end
+$upscope $end
+$scope begin column[1] $end
+$upscope $end
+$upscope $end
+$scope begin genblk3 $end
+$upscope $end
+$upscope $end
+$scope begin data_out_gen[0] $end
+$scope begin genblk6 $end
+$upscope $end
+$upscope $end
+$scope begin data_out_gen[1] $end
+$scope begin genblk6 $end
+$upscope $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+bx o"
+bx n"
+bx m"
+bx l"
+bx k"
+bx j"
+bx i"
+bx h"
+bx g"
+0f"
+b0 e"
+bx d"
+bx c"
+bx b"
+0a"
+b0 `"
+bx _"
+bx ^"
+bx ]"
+bx \"
+bx ["
+bx Z"
+bx Y"
+bx X"
+bx W"
+bx V"
+bx U"
+b0 T"
+bx S"
+b0 R"
+bx Q"
+b0 P"
+b0 O"
+b0 N"
+b0 M"
+bx L"
+bx K"
+bx J"
+bx I"
+bx H"
+bx G"
+bx F"
+bx E"
+bx D"
+bx C"
+bx B"
+bx A"
+bx @"
+bx ?"
+bx >"
+bx ="
+bx <"
+x;"
+b10 :"
+bx 9"
+x8"
+b10 7"
+bx 6"
+bx 5"
+bx 4"
+bx 3"
+bx 2"
+bx 1"
+bx 0"
+x/"
+bx ."
+b10 -"
+b10 ,"
+bx +"
+b0 *"
+bx )"
+b0xxxxxx ("
+bx '"
+bx &"
+bx %"
+b0 $"
+b0 #"
+b0 ""
+bx !"
+bx ~
+bx }
+b0 |
+bx {
+bx z
+xy
+bx x
+bx w
+bx v
+bx u
+b0 t
+bx s
+bx r
+xq
+xp
+bx o
+bx n
+bx m
+bx l
+xk
+bx j
+b0xxxxxx i
+bx h
+bx g
+bx f
+bx e
+bx d
+bx c
+bx b
+bx a
+b0 `
+bx _
+bx ^
+bx ]
+bx \
+b10 [
+b10 Z
+bx Y
+xX
+0W
+bx V
+bx U
+bx T
+b0 S
+b0xxxxxx R
+1Q
+b10 P
+b10 O
+xN
+0M
+bx L
+bx K
+b0 J
+bx I
+b0 H
+bx G
+0F
+b0 E
+0D
+b0 C
+b0 B
+b1 A
+b0 @
+bx ?
+0>
+b1 =
+b0 <
+b1 ;
+b0 :
+b11101000110010101110011011101000111001100101111011010010110110101100001011001110110010100110000001100000010111101101111011000100111010101100110010111110111010001100101011100110111010000101110011010000110010101111000 9
+bx 8
+b0 7
+b1 6
+b10011100010000 5
+bx 4
+b1110100011001010111001101110100011100110010111101101001011011010110000101100111011001010011000000110000001011110110100101100010011101010110011000101110011010000110010101111000 3
+b10 2
+b10 1
+bx 0
+b1110100011001010111001101110100011100110010111101101001011011010110000101100111011001010011000000110000001011110111001101110100011100100110010101100001011011010111011101100001011101100110010100101110011101100110001101100100 /
+b1 .
+b0 -
+0,
+bx +
+bx *
+bx )
+b0 (
+b0xxxxxx '
+bx &
+bx %
+b0 $
+bx #
+bx "
+bx !
+$end
+#5000
+b0 i"
+b0 h"
+b0 n"
+b0 m"
+b0 l"
+b0 j"
+b0 *
+b0 U
+b0 g
+b0 v
+b0 x
+b0 c"
+b0 d"
+b0 ^"
+b0 _"
+b0 +
+b0 V
+b0 h
+b0 w
+b0 )
+b0 T
+b0 f
+b0 u
+b0 %
+b0 K
+b0 e
+b0 m
+b0 ."
+b0 A"
+b0 4"
+b0 5"
+0/"
+b0 0"
+b0 C"
+b0 3"
+b0 ]
+b0 &"
+b0 H"
+b0 2"
+b0 ="
+b0 1"
+b0 ?"
+0p
+0y
+b0 ]"
+b0 \
+b0 r
+b0 Y"
+bx k"
+bx o"
+0X
+0N
+0q
+0k
+b0 6"
+1;"
+18"
+b0 '
+b0 R
+b0 i
+b0 ("
+b0 +"
+b0 9"
+b0 !"
+b0 <"
+b0 ~
+b0 >"
+b0 %"
+b0 @"
+b0 }
+b0 B"
+b0 z
+b0 ^
+b0 l
+b0 '"
+b0 D"
+b0 {
+b0 _
+b0 s
+b0 )"
+b0 Q"
+b0 E"
+b0 V"
+b0 a
+b0 I"
+b0 Z"
+b0 S"
+b0 F"
+b0 W"
+b0 b
+b0 J"
+b0 ["
+b0 U"
+b0 G"
+b0 X"
+b0 c
+b0 K"
+b0 \"
+1,
+1D
+#10000
+0,
+0D
+#15000
+b1100000011010000111000001111 d
+b1100000011010000111000001111 n
+b1100000011010000111000001111 L"
+b1111000011100000110100001100 o
+b1111000011100000110100001100 &
+b1111000011100000110100001100 L
+b1111000011100000110100001100 Y
+b1111000011100000110100001100 j
+bx o"
+bx k"
+b1111000011100000110100001100 g"
+b1111000011100000110100001100 b"
+b111100001110000011010000110000001111000011100000110100001100 "
+1,
+1D
+#20000
+0Q
+0,
+0D
+1>
+1M
+#25000
+bx k"
+bx o"
+b10 9"
+b10 !"
+b10 <"
+b10 ~
+1,
+1D
+#30000
+b100 P
+b100 [
+b100 -"
+b100 7"
+b100 O
+b100 Z
+b100 ,"
+b100 :"
+1W
+0,
+0D
+b10011100001111 -
+b10000000001001 @
+b10000000001001 H
+#35000
+b1 4"
+b1 5"
+b100 <"
+b100 ~
+b100 9"
+b100 !"
+1X
+1N
+bx o"
+bx k"
+1,
+1D
+#40000
+0,
+0D
+b10011100001110 -
+#45000
+b1111 4"
+b1111 5"
+bx k"
+bx o"
+b1 6"
+0;"
+08"
+b100 '
+b100 R
+b100 i
+b100 ("
+b1 +"
+1,
+1D
+#50000
+0,
+0D
+b10011100001101 -
+#55000
+b1111 6"
+b111110 '
+b111110 R
+b111110 i
+b111110 ("
+b1111 +"
+bx o"
+bx k"
+1,
+1D
+#60000
+b10 P
+b10 [
+b10 -"
+b10 7"
+b10 O
+b10 Z
+b10 ,"
+b10 :"
+0W
+0,
+0D
+b0 0
+b10000000000000000000000000000011 8
+b0 @
+b0 H
+#65000
+bx k"
+bx o"
+0X
+0N
+1,
+1D
+#70000
+0,
+0D
+b1 0

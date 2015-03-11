@@ -424,57 +424,22 @@ always @ (*) begin
     case (state)
         STATE_WAIT: begin
             // What should the starting value be? Insert your code here.
-            col_strip_next                      = 'h0;
-        end
-        
-        STATE_LOADING_1: begin
-            // What happens in this state? Insert your code here. If nothing changes, you can remove this case completely.
-            col_strip_next                      = 'h0;
-        end
-        
-        STATE_LOADING_2: begin
-            // What happens in this state? Insert your code here. If nothing changes, you can remove this case completely.
-            col_strip_next                      = 'h0;
-        end
-        
-        STATE_LOADING_3: begin
-            // What happens in this state? Insert your code here. If nothing changes, you can remove this case completely.
-            col_strip_next                      = 'h0;
-        end
-        
-        STATE_PROCESSING_CALC: begin
-            // What happens in this state? Insert your code here. If nothing changes, you can remove this case completely.
-            col_strip_next                      = 'h0;
-        end
-        
-        STATE_PROCESSING_LOADSS: begin
-            // What happens in this state? Insert your code here. If nothing changes, you can remove this case completely.
-            col_strip_next                      = 'h0;
-        end
-        
-        STATE_PROCESSING_CALC_LAST: begin
-            // What happens in this state? Insert your code here. If nothing changes, you can remove this case completely.
-            col_strip_next                      = 'h0;
+            col_strip_next                      = 0'h0;
         end
         
         STATE_PROCESSING_LOADSS_LAST: begin
             // What happens in this state? Insert your code here. If nothing changes, you can remove this case completely.
-            col_strip_next                      = 'h0;
+            col_strip_next                      = col_strip + 2;
         end
         
         STATE_PROCESSING_DONE: begin
             // What happens in this state? Insert your code here. If nothing changes, you can remove this case completely.
-            col_strip_next                      = 'h0;
-        end
-        
-        STATE_ERROR: begin
-            // What happens in case of an error? Insert your code here. If nothing changes, you can remove this case completely.
-            col_strip_next                      = 'h0;
+            col_strip_next                      = 0'h0;
         end
         
         default: begin
             // What happens in the default (unexpected) case? Insert your code here. If nothing changes, you can remove this case completely.
-            col_strip_next                      = 'h0;
+            col_strip_next                      = col_strip;
         end
     endcase
 end
